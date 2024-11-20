@@ -3,64 +3,64 @@ import os
 from pdf2image import convert_from_path
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'  # Adjust this path if necessary
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' 
 
 #Version 6
 def pdf_to_text(pdf_path, output_text_path, lang='deu', poppler_path=r'C:\Users\thm-efg\Downloads\Poppler\poppler-24.08.0\Library\bin'):
-    # Convert each page of the PDF to an image
+    # Umwandlung der Seite von PDF in ein Bild
     pages = convert_from_path(pdf_path, 300, poppler_path=poppler_path)
     
-    # List to hold the text from each page
+    # Liste zum Speichern des Textes jeder Seite
     text = []
 
-    # Process each page image with OCR
+    # Jede Seitenbild mit OCR verarbeiten
     for i, page in enumerate(pages):
-        # Perform OCR on the page with the specified language
+        # OCR auf der Seite mit der angegebenen Sprache ausführen
         page_text = pytesseract.image_to_string(page, lang=lang)
         text.append(page_text)
         
-    # Combine all the text into a single string
+    # Alle Texte zu einer einzigen Zeichenkette kombinieren
     full_text = "\n".join(text)
     
-    # Define the start and end markers for the list extraction
+    # Definieren der Start- und Endmarkierungen für die Listenauswertung
     start_marker = "Wir bitten deshalb um Übersendung folgender Unterlagen in Kopie:"
     end_marker = "Bezüglich unserer Anfrage"
 
-    # Use regular expression to extract the list part from the full text
+    # Reguläre Ausdruck verwenden, um den Listenteil aus dem gesamten Text zu extrahieren
     extracted_text = re.search(f"{re.escape(start_marker)}(.*?){re.escape(end_marker)}", full_text, re.DOTALL)
 
     if extracted_text:
         list_text = extracted_text.group(1).strip()
     else:
-        list_text = "No list found."
+        list_text = "Keine Liste gefunden."
 
-    # Write the extracted list text to a new text file with the same name as the PDF
+    # Den extrahierten Listentext in eine neue Textdatei mit dem gleichen Namen wie das PDF speichern
     with open(output_text_path, 'w', encoding='utf-8') as f:
         f.write(list_text)
 
-    print(f"Text extraction complete for {pdf_path}. Saved to: {output_text_path}")
+    print(f"Textextraktion abgeschlossen für {pdf_path}. Gespeichert unter: {output_text_path}")
 
-# Root folder containing PDFs and subfolders
-root_pdf_folder = r"I:\Projekte\2024_07_MD_Anfragen\2023\Phase B"  # Replace with your root folder path
+# Root-Ordner, der PDFs und Unterordner enthält
+root_pdf_folder = r"I:\Projekte\2024_07_MD_Anfragen\2023\Phase B"  # Ersetze dies durch den Pfad deines Root-Ordners
 
-# Folder where you want to save the result text files
-output_folder = r"C:\Users\thm-efg\Documents\Ergebnis\2023\Test"  # Replace with your output folder path
+# Ordner, in dem du die Ergebnis-Textdateien speichern möchtest
+output_folder = r"I:\Projekte\2024_07_MD_Anfragen\Analyse\23"  # Ersetze dies durch den Pfad deines Ausgabeverzeichnisses
 
-# Create the output folder if it doesn't exist
+# Erstelle den Ausgabeverzeichnis, falls er noch nicht existiert
 os.makedirs(output_folder, exist_ok=True)
 
-# Recursively iterate over all files in the root_pdf_folder and its subdirectories
+# Rekursiv über alle Dateien im root_pdf_folder und seinen Unterverzeichnissen iterieren
 for dirpath, dirnames, filenames in os.walk(root_pdf_folder):
     for filename in filenames:
-        # Check if the file has a .pdf extension
+        # Überprüfen, ob die Datei eine .pdf-Erweiterung hat
         if filename.lower().endswith(".pdf"):
-            # Full path of the current PDF file
+            # Vollständiger Pfad der aktuellen PDF-Datei
             pdf_path = os.path.join(dirpath, filename)
             
-            # Create the output text file path based on the PDF filename (e.g., abc.pdf -> abc.txt)
+            # Erstelle den Ausgabepfad für die Textdatei basierend auf dem PDF-Dateinamen (z.B. abc.pdf -> abc.txt)
             output_text_path = os.path.join(output_folder, f"{os.path.splitext(filename)[0]}.txt")
             
-            # Call the pdf_to_text function to process the PDF
+            # Rufe die pdf_to_text-Funktion auf, um das PDF zu verarbeiten
             pdf_to_text(pdf_path, output_text_path)
 
 ## Version 5
