@@ -39,10 +39,10 @@ def extract_list_from_text(text):
     return list_text
 
 # Root folder containing PDFs and subfolders
-root_pdf_folder = r"C:\Users\thm-efg\Documents\Testdaten"  # Change this to your root folder path
+root_pdf_folder = r"I:\Projekte\2024_07_MD_Anfragen\2023\Phase B\Positiv"  # Change this to your root folder path
 
 # Folder to store the result text files
-output_folder = r"I:\Projekte\2024_07_MD_Anfragen\Analyse\23"  # Change this to your output folder path
+output_folder = r"I:\Projekte\2024_07_MD_Anfragen\Analyse\23\positiv"  # Change this to your output folder path
 
 # Create output folder if it doesn't exist
 os.makedirs(output_folder, exist_ok=True)
