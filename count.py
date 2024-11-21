@@ -54,7 +54,8 @@ for bar in bars:
 
 plt.xlabel("Unterlagen", fontsize=10)
 plt.ylabel("Anfragehäufigkeit", fontsize=10)
-plt.title("Prüfauftraganfrage Statistik 2023", fontsize=13)
+#plt.title("Prüfauftraganfrage Statistik 2023", fontsize=13)
+plt.title("Prüfauftraganfrage Statistik 2024", fontsize=13)
 plt.xticks(rotation=90, ha="right", fontsize=10)  
 plt.tight_layout()
 plt.show()
