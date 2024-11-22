@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 # VERSION 5: Schnitstelle zum Zählen bzw. zur Darstellung als Balkendiagramm
 
-#folder_input = r"I:\Projekte\2024_07_MD_Anfragen\Analyse\2023_alle"
-folder_input = r"I:\Projekte\2024_07_MD_Anfragen\Analyse\2024_alle"
+folder_input = r"I:\Projekte\2024_07_MD_Anfragen\Analyse\2023_alle"
+#folder_input = r"I:\Projekte\2024_07_MD_Anfragen\Analyse\2024_alle"
 
 word_counts = defaultdict(int)
 
@@ -54,8 +54,8 @@ for bar in bars:
 
 plt.xlabel("Unterlagen", fontsize=10)
 plt.ylabel("Anfragehäufigkeit", fontsize=10)
-#plt.title("Prüfauftraganfrage Statistik 2023", fontsize=13)
-plt.title("Prüfauftraganfrage Statistik 2024", fontsize=13)
+plt.title("Prüfauftraganfrage Statistik 2023", fontsize=13)
+#plt.title("Prüfauftraganfrage Statistik 2024", fontsize=13)
 plt.xticks(rotation=90, ha="right", fontsize=10)  
 plt.tight_layout()
 plt.show()
