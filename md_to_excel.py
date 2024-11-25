@@ -5,19 +5,22 @@ import pandas as pd
 
 def extract_requested_documents(root_dir, target_filename="Prüfauftrag.pdf"):
     document_stats = {}
+    total_files = 0  # Zählt die Gesamtzahl der Prüfauftrag.pdf
+    no_structure_count = 0  # Zählt Dateien ohne relevante Struktur
     
     # Muster für den interessierenden Abschnitt
-    start_pattern = "Wir bitten deshalb um Übersendung folgender Unterlagen in Kopie:"
-    end_pattern = "Bezüglich unserer Anfrage"
+    start_pattern = r"Wir bitten deshalb um Übersendung folgender Unterlagen in Kopie:"
+    end_pattern = r"Bezüglich unserer Anfrage"
+    
+    # Regulärer Ausdruck für Dokumente im Format "Text (ID)"
+    document_pattern = r"([^\n]+?\s*\([A-Z]{2}\d{6}\))"
     
     # Durchlaufe alle Verzeichnisse und Dateien
     for dirpath, dirnames, filenames in os.walk(root_dir):
-        print(f"Verarbeite Verzeichnis: {dirpath}")  # Debugging-Ausgabe
         for file in filenames:
-            # Dateinamen in Kleinbuchstaben umwandeln für Vergleich
             if file.lower() == target_filename.lower():
+                total_files += 1  # Zähle die Datei
                 pdf_path = os.path.join(dirpath, file)
-                print(f"Verarbeite Datei: {pdf_path}")  # Debugging-Ausgabe
                 try:
                     # PDF lesen
                     reader = PdfReader(pdf_path)
@@ -27,44 +30,58 @@ def extract_requested_documents(root_dir, target_filename="Prüfauftrag.pdf"):
 
                     # Überprüfen, ob Text gefunden wurde
                     if not text.strip():
-                        print(f"Keine Inhalte gefunden in {pdf_path}")
+                        no_structure_count += 1
                         continue
                     
                     # Abschnitt extrahieren
                     match = re.search(f"{start_pattern}(.*?){end_pattern}", text, re.DOTALL | re.IGNORECASE)
                     if match:
-                        document_list = match.group(1).strip().split("\n")
-                        for doc in document_list:
+                        document_text = match.group(1).strip()
+                        
+                        # Dokumente extrahieren basierend auf dem Muster
+                        documents = re.findall(document_pattern, document_text)
+                        
+                        if not documents:  # Falls kein Dokument gefunden wurde
+                            no_structure_count += 1
+                        
+                        for doc in documents:
                             doc_name = doc.strip()
                             if doc_name:
                                 document_stats[doc_name] = document_stats.get(doc_name, 0) + 1
                     else:
-                        print(f"Kein passender Abschnitt gefunden in {pdf_path}")
+                        no_structure_count += 1  # Abschnitt nicht gefunden
                 except Exception as e:
                     print(f"Fehler beim Lesen der Datei {pdf_path}: {e}")
     
-    return document_stats
+    return document_stats, total_files, no_structure_count
 
-def save_to_excel(document_stats, output_path):
+def save_to_excel(document_stats, total_files, no_structure_count, output_path):
     # Daten in ein DataFrame umwandeln
-    df = pd.DataFrame(list(document_stats.items()), columns=["Dokument", "Anzahl"])
-    df = df.sort_values(by="Anzahl", ascending=False)
+    df = pd.DataFrame(list(document_stats.items()), columns=["Angefragte Dokumente", "Häufigkeit"])
+    df = df.sort_values(by="Häufigkeit", ascending=False)
+    
+    # Zusätzliche Informationen hinzufügen
+    summary = pd.DataFrame([
+        {"Angefragte Dokumente": "Total Prüfauftrag.pdf gelesen", "Häufigkeit": total_files},
+        {"Angefragte Dokumente": "Prüfauftrag.pdf ohne Struktur/Pattern", "Häufigkeit": no_structure_count},
+        {"Angefragte Dokumente": "", "Häufigkeit": ""}
+    ])
+    
+    # Zusammenführen
+    df = pd.concat([summary, df], ignore_index=True)
     
     # Excel-Datei speichern
     df.to_excel(output_path, index=False)
     print(f"Statistiken wurden in '{output_path}' gespeichert.")
 
 # Hauptverzeichnis angeben
-root_directory = r"I:\Projekte\MD Anfragen 23_24\Anforderungen MD 2023\Anforderungen April 2023"
+root_directory = r"I:\Projekte\MD Anfragen 23_24\Anforderungen MD 2023"
 
 # Zielpfad für die Excel-Datei
-output_excel_path = r"I:\Projekte\MD Anfragen 23_24\Analyse\document_statistics.xlsx"
+output_excel_path = r"I:\Projekte\MD Anfragen 23_24\Analyse\md_statistik2023.xlsx"
 
 # Extraktion starten
-document_statistics = extract_requested_documents(root_directory)
+document_statistics, total_files, no_structure_count = extract_requested_documents(root_directory)
 
 # Ergebnisse in Excel speichern
-if document_statistics:
-    save_to_excel(document_statistics, output_excel_path)
-else:
-    print("Keine Daten gefunden, Excel-Datei wurde nicht erstellt.")
+save_to_excel(document_statistics, total_files, no_structure_count, output_excel_path)
