@@ -1,0 +1,31 @@
+(KH-) Entlassungsbericht (AD010103): 11
+Verlegungsbericht (intern) (AD010106): 11
+Pflegebericht (VL160105): 11
+Befunde Radiologie (ggf. MRT, CT) (DG020110): 11
+Befunde Sonographie (DG020111): 11
+Laborbefund extern (LB120102): 11
+Laborbefunde kumulativ (LB120103): 11
+Fieberkurve/Tageskurve (VL160106): 11
+Arztdokumentation (Visite) (AD060105): 11
+Ärztliche Anordnungen (AD060108): 11
+Ärztliche Verlaufsdokumentation (AD010110): 11
+Konsiliarbefund extern (AD060104): 11
+Konsiliarbefund intern (AD060103): 11
+Anamnese/Krankengeschichte (AU010101): 11
+Aufnahmebefund (AU010103): 11
+Narkoseprotokoll (OP010101): 11
+Befunde Histologie (ggf. Zytologie) (PT080102): 11
+Interventionsbericht (diagnostisch, therapeutisch) (AD010114): 11
+(Postoperativer) Überwachungsbogen (OP010102): 11
+Befund extern (AD020208): 11
+Vorbefunde (E-OP-Arzt-Berichte) (AD020208): 11
+Checkliste Entlassung (AM030102): 11
+Entlassungsplan (AM030103): 11
+Einsatzprotokoll (AU190101): 6
+Notaufnahmebericht (AU190102): 6
+Prämedikationsbogen (AM010301): 4
+Einweisung (AU050101): 5
+Teambesprechungsprotokoll (AD060107): 1
+Verlaufsdokumentation Sozialdienst (AM190201): 1
+Befunde Endoskopie (DG020105): 1
+Medikamentenbogen (TH130107): 1

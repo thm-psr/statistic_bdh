@@ -96,7 +96,7 @@ def save_to_excel(document_stats, total_files, no_structure_count, output_path):
 root_directory = r"I:\Projekte\MD Anfragen 23_24\Anforderungen MD 2024"
 
 # Zielpfad für die Excel-Datei
-output_excel_path = r"I:\Projekte\MD Anfragen 23_24\Analyse\md_statistik2024_testtest.xlsx"
+output_excel_path = r"I:\Projekte\MD Anfragen 23_24\Analyse\md_statistik2024.xlsx"
 
 # Extraktion starten
 document_statistics, total_files, no_structure_count = extract_requested_documents(root_directory)
